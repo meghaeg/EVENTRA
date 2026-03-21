@@ -1,5 +1,8 @@
 import React, { createContext, useState, useEffect, useContext } from 'react';
 import api from '../utils/api';
+import * as ReactCheck from 'react';
+
+console.log('React instance:', ReactCheck);
 
 const AuthContext = createContext();
 
