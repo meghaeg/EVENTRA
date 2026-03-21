@@ -11,7 +11,7 @@ RUN npm install
 
 # Install client dependencies
 WORKDIR /app/client
-RUN npm install
+RUN npm install --legacy-peer-deps
 
 # Install concurrently to run both
 RUN npm install -g concurrently
