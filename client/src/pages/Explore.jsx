@@ -157,6 +157,72 @@ const Explore = () => {
                     </select>
                 </div>
             </div>
+<div
+  style={{
+    height: '420px',
+    width: '100%',
+    marginBottom: '60px',
+    borderRadius: '24px',
+    overflow: 'hidden',
+    boxShadow: 'var(--shadow-lg)'
+  }}
+>
+  {typeof window !== 'undefined' && (
+    <MapContainer
+      center={tnCenter}
+      zoom={7}
+      scrollWheelZoom={false}
+      maxBounds={tnBounds}
+      maxBoundsViscosity={1.0}
+      minZoom={6}
+      style={{ height: '100%', width: '100%' }}
+    >
+      <MapRelocator districtFilter={districtFilter} tnCenter={tnCenter} />
+      <MapClickHandler setDistrictFilter={setDistrictFilter} list={tnDistrictsList} />
+
+      <TileLayer
+        attribution='&copy; OpenStreetMap'
+        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+      />
+
+      {filteredEvents.map(event => (
+        <Marker
+          key={event._id}
+          position={[event.location.lat, event.location.lng]}
+          eventHandlers={{
+            click: () => {
+              if (event.location.district) {
+                setDistrictFilter(event.location.district);
+              } else {
+                const dist = tnDistrictsList.find(d =>
+                  event.location.address.toLowerCase().includes(d.toLowerCase())
+                );
+                if (dist) setDistrictFilter(dist);
+              }
+            }
+          }}
+        >
+          <Popup>
+            <strong style={{ fontSize: '1.1rem' }}>{event.title}</strong><br />
+            <span style={{ color: 'var(--primary)', fontWeight: '600' }}>
+              {event.category}
+            </span><br />
+            <span style={{ color: 'var(--text-muted)' }}>
+              {event.location.district || 'Tamil Nadu'}
+            </span><br />
+            <Link
+              to={`/events/${event._id}`}
+              style={{ fontWeight: '600', textDecoration: 'underline' }}
+            >
+              View Details
+            </Link>
+          </Popup>
+        </Marker>
+      ))}
+    </MapContainer>
+  )}
+</div>
+
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '32px', paddingBottom: '60px' }}>
                 {filteredEvents.map(event => (
                     <div key={event._id} className="card" style={{ justifyContent: 'space-between', padding: 0, overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
