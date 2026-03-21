@@ -1,25 +1,26 @@
+# Use Node 18
 FROM node:18
 
+# Set working directory
 WORKDIR /app
 
-# Copy entire project
+# Copy project files
 COPY . .
 
 # Install server dependencies
 WORKDIR /app/server
-RUN npm install
+RUN npm install --legacy-peer-deps
 
 # Install client dependencies
 WORKDIR /app/client
 RUN npm install --legacy-peer-deps
 
-# Install concurrently to run both
+# Install concurrently globally
 RUN npm install -g concurrently
 
-# Expose both ports
-EXPOSE 5000
-EXPOSE 5173
+# Expose ports
+EXPOSE 5000 5173
 
-# Run both client and server
+# Default command to run server and client
 WORKDIR /app
-CMD ["concurrently", "\"cd server && npm start\"", "\"cd client && npm run dev -- --host\""]
+CMD ["concurrently", "cd server && npm start", "cd client && npm run dev -- --host"]
