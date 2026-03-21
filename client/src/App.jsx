@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import Navbar from './components/Navbar';
 import Home from './pages/Home';
@@ -17,7 +17,7 @@ import AdminRoute from './components/AdminRoute';
 function App() {
   return (
     <AuthProvider>
-      <Router>
+      <>
         <Navbar />
         <div style={{ padding: '20px 0' }}>
           <Routes>
@@ -26,13 +26,45 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path="/events/:id" element={<EventDetails />} />
-            <Route path="/dashboard" element={<PrivateRoute><Dashboard /></PrivateRoute>} />
-            <Route path="/create-event" element={<PrivateRoute><CreateEvent /></PrivateRoute>} />
-            <Route path="/my-events" element={<PrivateRoute><MyEvents /></PrivateRoute>} />
-            <Route path="/admin" element={<AdminRoute><AdminDashboard /></AdminRoute>} />
+
+            <Route 
+              path="/dashboard" 
+              element={
+                <PrivateRoute>
+                  <Dashboard />
+                </PrivateRoute>
+              } 
+            />
+
+            <Route 
+              path="/create-event" 
+              element={
+                <PrivateRoute>
+                  <CreateEvent />
+                </PrivateRoute>
+              } 
+            />
+
+            <Route 
+              path="/my-events" 
+              element={
+                <PrivateRoute>
+                  <MyEvents />
+                </PrivateRoute>
+              } 
+            />
+
+            <Route 
+              path="/admin" 
+              element={
+                <AdminRoute>
+                  <AdminDashboard />
+                </AdminRoute>
+              } 
+            />
           </Routes>
         </div>
-      </Router>
+      </>
     </AuthProvider>
   );
 }
