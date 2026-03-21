@@ -16,5 +16,5 @@ spec:
       - name: eventra
         image: meghaeg/eventra:latest
         ports:
-        - containerPort: 5050
-        - containerPort: 5173
+          - containerPort: 5000   # backend port (matches server.js)
+          - containerPort: 5173   # frontend port
