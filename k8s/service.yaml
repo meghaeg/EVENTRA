@@ -7,11 +7,6 @@ spec:
   selector:
     app: eventra
   ports:
-    - name: backend
-      port: 5000         # service port (can be any number)
-      targetPort: 5000   # must match containerPort of backend
-      nodePort: 30007    # access in browser: http://localhost:30007
-    - name: frontend
-      port: 5173
-      targetPort: 5173   # must match containerPort of frontend
+    - port: 5000
+      targetPort: 5000
       nodePort: 30008

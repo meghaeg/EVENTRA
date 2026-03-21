@@ -1,26 +1,26 @@
-# Use Node 18
+# ---------- BUILD FRONTEND ----------
+FROM node:18 AS build
+
+WORKDIR /app/client
+COPY client/package*.json ./
+RUN npm install
+COPY client .
+RUN npm run build
+
+# ---------- BACKEND ----------
 FROM node:18
 
-# Set working directory
 WORKDIR /app
 
-# Copy project files
-COPY . .
+# Copy backend
+COPY server ./server
 
-# Install server dependencies
 WORKDIR /app/server
-RUN npm install --legacy-peer-deps
+RUN npm install
 
-# Install client dependencies
-WORKDIR /app/client
-RUN npm install --legacy-peer-deps
+# Copy built frontend into server public folder
+COPY --from=build /app/client/dist ../client/dist
 
-# Install concurrently globally
-RUN npm install -g concurrently
+EXPOSE 5000
 
-# Expose ports
-EXPOSE 5000 5173
-
-# Default command to run server and client
-WORKDIR /app
-CMD ["concurrently", "cd server && npm start", "cd client && npm run dev -- --host"]
+CMD ["npm", "start"]
