@@ -13,7 +13,8 @@ spec:
         app: eventra
     spec:
       containers:
-      - name: eventra
-        image: meghaeg/eventra:latest
-        ports:
-          - containerPort: 5000
+        - name: eventra
+          image: meghaeg/eventra:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 5000
