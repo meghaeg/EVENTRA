@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const User = require('./models/User');
 const bcrypt = require('bcryptjs');
-const client = require('prom-client'); // ✅ Prometheus
+const client = require('prom-client');
 
 const app = express();
 const path = require('path');
@@ -12,11 +12,10 @@ const path = require('path');
 // ---------------------- MIDDLEWARE ----------------------
 app.use(express.json({ extended: false }));
 app.use(cors());
-app.use(express.static(path.join(__dirname, '../client/dist')));
 
 // ---------------------- PROMETHEUS SETUP ----------------------
 
-// Collect default system metrics (CPU, memory, etc.)
+// Collect default system metrics
 client.collectDefaultMetrics();
 
 // Custom HTTP request counter
@@ -38,6 +37,17 @@ app.use((req, res, next) => {
     next();
 });
 
+// ---------------------- METRICS ENDPOINT ----------------------
+// ✅ Put EARLY to avoid override
+app.get('/metrics', async (req, res) => {
+    try {
+        res.set('Content-Type', client.register.contentType);
+        res.end(await client.register.metrics());
+    } catch (err) {
+        res.status(500).end(err);
+    }
+});
+
 // ---------------------- DATABASE ----------------------
 mongoose.connect(process.env.MONGODB_URI, {
     useNewUrlParser: true,
@@ -45,7 +55,6 @@ mongoose.connect(process.env.MONGODB_URI, {
 }).then(async () => {
     console.log('MongoDB Connected');
 
-    // Seed admin
     try {
         let admin = await User.findOne({ email: 'admin' });
         if (!admin) {
@@ -71,19 +80,12 @@ app.use('/api/auth', require('./routes/auth'));
 app.use('/api/events', require('./routes/events'));
 app.use('/api/admin', require('./routes/admin'));
 
-// ---------------------- METRICS ENDPOINT ----------------------
-// ⚠️ MUST be before frontend catch-all
-app.get('/metrics', async (req, res) => {
-    try {
-        res.set('Content-Type', client.register.contentType);
-        res.end(await client.register.metrics());
-    } catch (err) {
-        res.status(500).end(err);
-    }
-});
+// ---------------------- STATIC FILES ----------------------
+// ✅ Move AFTER API + metrics
+app.use(express.static(path.join(__dirname, '../client/dist')));
 
 // ---------------------- FRONTEND (React) ----------------------
-app.use((req, res) => {
+app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, '../client/dist/index.html'));
 });
 
