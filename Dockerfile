@@ -10,15 +10,16 @@ RUN npm run build
 # ---------- BACKEND ----------
 FROM node:18
 
-WORKDIR /app
-
-# Copy backend
-COPY server ./server
-
 WORKDIR /app/server
+
+# Install backend dependencies
+COPY server/package*.json ./
 RUN npm install
 
-# Copy built frontend into server public folder
+# Copy backend source
+COPY server .
+
+# Copy built frontend into backend
 COPY --from=build /app/client/dist ../client/dist
 
 EXPOSE 5000
