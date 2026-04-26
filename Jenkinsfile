@@ -21,7 +21,6 @@ pipeline {
             }
         }
 
-        // 🔥 REPLACED Kubernetes deploy with Terraform
         stage('Terraform Init') {
             steps {
                 bat 'cd terraform && terraform init'
@@ -31,6 +30,13 @@ pipeline {
         stage('Terraform Apply') {
             steps {
                 bat 'cd terraform && terraform apply -auto-approve'
+            }
+        }
+
+        // 🔥 IMPORTANT: Forces new pods → pulls latest image
+        stage('Restart Deployment') {
+            steps {
+                bat 'kubectl rollout restart deployment eventra-deployment'
             }
         }
     }
