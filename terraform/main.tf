@@ -2,7 +2,6 @@ provider "kubernetes" {
   config_path = "~/.kube/config"
 }
 
-# Deployment
 resource "kubernetes_deployment" "eventra" {
   metadata {
     name = "eventra-deployment"
@@ -28,14 +27,25 @@ resource "kubernetes_deployment" "eventra" {
       }
 
       spec {
+
+        #  MAIN APPLICATION CONTAINER
         container {
           name  = "eventra"
           image = "meghaeg/eventra:latest"
-
           image_pull_policy = "Always"
 
           port {
             container_port = 5000
+          }
+        }
+
+        #  SIDECAR CONTAINER (Metrics exporter)
+        container {
+          name  = "metrics-sidecar"
+          image = "prom/node-exporter"
+
+          port {
+            container_port = 9100
           }
         }
       }
