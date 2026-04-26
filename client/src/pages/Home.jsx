@@ -141,7 +141,7 @@ const Home = () => {
                     <div className="hero-badge"><span></span> Your City, Your Events</div>
                     <h1 className="hero-h1">
                         Discover<br />
-                        <em>Local Hub</em><br />
+                        <em>Local</em><br />
                         Events
                     </h1>
                     <p className="hero-sub">
