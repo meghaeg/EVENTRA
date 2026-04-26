@@ -21,12 +21,16 @@ pipeline {
             }
         }
 
-        stage('Deploy to Kubernetes') {
+        // 🔥 REPLACED Kubernetes deploy with Terraform
+        stage('Terraform Init') {
             steps {
-                withCredentials([file(credentialsId: 'kubeconfig', variable: 'KUBECONFIG')]) {
-                    bat 'kubectl apply -f k8s/'
-                    bat 'kubectl rollout restart deployment eventra-deployment'
-                }
+                bat 'cd terraform && terraform init'
+            }
+        }
+
+        stage('Terraform Apply') {
+            steps {
+                bat 'cd terraform && terraform apply -auto-approve'
             }
         }
     }
