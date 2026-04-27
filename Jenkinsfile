@@ -33,7 +33,6 @@ pipeline {
             }
         }
 
-        // 🔥 IMPORTANT: Forces new pods → pulls latest image
         stage('Restart Deployment') {
             steps {
                 bat 'kubectl rollout restart deployment eventra-deployment'
