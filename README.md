@@ -1,4 +1,4 @@
-# EVENTRA – AUTOMATED CI/CD PIPELINE FOR DOCKER BUILD WITH TERRAFORM MANAGED KUBERNETES DEPLOYMENT AND PROMETHEUS-GRAFANA MONITORING USING JENKINS
+# EVENTRA – Automated CI/CD Pipeline with Kubernetes, Terraform & Monitoring 
 
 
 EVENTRA is a full-stack MERN application deployed using a complete DevOps pipeline that automates build, containerization, deployment, and monitoring. The project demonstrates real-world implementation of CI/CD using Jenkins, Docker, Terraform, and Kubernetes, along with observability using Prometheus and Grafana.
