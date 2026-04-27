@@ -8,7 +8,7 @@ PROJECT OVERVIEW
 
 This project automates the entire lifecycle of an application:
 
-• Code is pushed to GitHub
+• Code is autopushed to GitHub using scripts
 • Jenkins triggers the pipeline
 • Docker builds and pushes the image
 • Terraform provisions infrastructure
@@ -59,7 +59,7 @@ EVENTRA/
 
 WORKFLOW (STEP-BY-STEP)
 
-1. Developer pushes code to GitHub
+1. Developer pushes code to GitHub using scripts (npm run autopush)
 2. Jenkins pipeline is triggered
 3. Jenkins builds Docker image (multi-stage build)
 4. Image is pushed to Docker Hub
